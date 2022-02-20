@@ -45,7 +45,7 @@ const ProfileContent = () => {
     return (
         <>
         {graphData ? (
-           <pre>{JSON.stringify(graphData, null, 2)}</pre>
+           <pre className="container-md">{JSON.stringify(graphData, null, 2)}</pre>
         ) : null}
         </>
     );
