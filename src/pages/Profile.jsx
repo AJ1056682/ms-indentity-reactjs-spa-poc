@@ -18,33 +18,35 @@ const ProfileContent = () => {
     const account = useAccount(accounts[0] || {});
     const [graphData, setGraphData] = useState(null);
 
-    useEffect(() => {
-        if (account && inProgress === "none" && !graphData) {
-            instance.acquireTokenSilent({
-                scopes: protectedResources.graphMe.scopes,
-                account: account
-            }).then((response) => {
-                callApiWithToken(response.accessToken, protectedResources.graphMe.endpoint)
-                    .then(response => setGraphData(response));
-            }).catch((error) => {
-                // in case if silent token acquisition fails, fallback to an interactive method
-                if (error instanceof InteractionRequiredAuthError) {
-                    if (account && inProgress === "none") {
-                        instance.acquireTokenPopup({
-                            scopes: protectedResources.graphMe.scopes,
-                        }).then((response) => {
-                            callApiWithToken(response.accessToken, protectedResources.graphMe.endpoint)
-                                .then(response => setGraphData(response));
-                        }).catch(error => console.log(error));
-                    }
+    useEffect(async () => {
+        try {
+            if (account && inProgress === "none" && !graphData) {
+                const endpoint = protectedResources?.graphMe.endpoint;
+                const scopes = protectedResources?.graphMe.scopes;
+                const response = await instance.acquireTokenSilent({scopes, account});
+                const data = await callApiWithToken(response.accessToken, endpoint);
+                setGraphData(data);
                 }
-            });
+        } catch (error) {
+            // in case if silent token acquisition fails, fallback to an interactive method
+            if (error instanceof InteractionRequiredAuthError) {
+                if (account && inProgress === "none") {
+                    instance.acquireTokenPopup({
+                        scopes: scopes,
+                    }).then((response) => {
+                        callApiWithToken(response.accessToken, endpoint)
+                            .then(response => setGraphData(response));
+                    }).catch(error => console.log(error));
+                }
+            }
         }
     }, [account, inProgress, instance]);
   
     return (
         <>
-            { graphData ? <ProfileData graphData={graphData} /> : null }
+        {graphData ? (
+           <pre>{JSON.stringify(graphData, null, 2)}</pre>
+        ) : null}
         </>
     );
 };
