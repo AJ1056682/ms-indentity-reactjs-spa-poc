@@ -12,7 +12,6 @@ export const AddRole = (props) => {
     return (
         <>
             {roles ? (
-                <Form onSubmit={handleSumbit}>
                     <Form.Group controlId="roles">
                         <Form.Label>Role</Form.Label>
                         <Form.Control
@@ -27,7 +26,6 @@ export const AddRole = (props) => {
                             ))}
                         </Form.Control>
                     </Form.Group>
-                </Form>
             ) : null}
         </>
     );

@@ -9,12 +9,11 @@ function handleSumbit(event, selectedRole, email) {
 export const ButtonAssignRoleComponent = (props) => {
     const selectedRole = props.selectedRole;
     const email = props.email;
-    console.log(selectedRole, email);
     return (
         <>
-            <Button variant="primary" type="submit" onClick={(event) => handleSumbit(event, selectedRole, email)}>
-                Assign Role
-            </Button>
+                <Button variant="primary" onClick={(e) => handleSumbit(event, selectedRole, email)}>
+                    Assign Role
+                </Button>
         </>
     );
 }

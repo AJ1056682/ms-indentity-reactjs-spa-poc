@@ -9,7 +9,10 @@ import { EmailComponent } from "../components/EmailComponent";
 import { ButtonAssignRoleComponent } from "../components/ButtonAssignRoleComponent";
 import { AddGroupe } from "../components/GroupeTabDisplay";
 
-
+function handleSumbit(event, selectedItem, email) {
+  event.preventDefault();
+  console.log('it me!', selectedItem, email);
+}
 const SettingsContent = () => {
   /**
    * useMsal is hook that returns the PublicClientApplication instance,
@@ -61,24 +64,36 @@ const SettingsContent = () => {
       id="noanim-tab-example"
       className="mb-2">
       <Tab eventKey="groupe" title="Groupe">
-      {/* {roles ? (
+        {roles ? (
           <>
             <div className="container-md">
-              <AddGroupe groupes={groupes} selectedGroupe={selectedGroupe} setSelectedGroupe={setSelectedGroupe} />
-              <EmailComponent setEmail={setEmail} />
-              <ButtonAssignRoleComponent selectedGroupe={selectedGroupe} email={email}/>
+              <Form onSubmit={(event) => handleSumbit(event, selectedRole, email)}>
+                <AddGroupe groupes={roles} selectedGroupe={selectedRole} setSelectedGroupe={setSelectedRole} />
+                <EmailComponent setEmail={setEmail} />
+                <Button variant="primary" type="submit" >
+                  Assign Role
+                </Button>
+              </Form>
+
             </div>
           </>
-        ) : null} */}
+        ) : null}
       </Tab>
       <Tab eventKey="role" title="Role">
         {roles ? (
           <>
             <div className="container-md">
-              <AddRole roles={roles} selectedRole={selectedRole} setSelectedRole={setSelectedRole} />
-              <EmailComponent setEmail={setEmail} />
-              <ButtonAssignRoleComponent selectedRole={selectedRole} email={email}/>
+              <Form onSubmit={(event) => handleSumbit(event, selectedRole, email)}>
+                <Form.Group controlId="role">
+                  <AddRole roles={roles} selectedRole={selectedRole} setSelectedRole={setSelectedRole} />
+                  <EmailComponent setEmail={setEmail} />
+                </Form.Group>
+                <Button variant="primary" type="submit" >
+                  Assign Role
+                </Button>
+                </Form>
             </div>
+
           </>
         ) : null}
       </Tab>

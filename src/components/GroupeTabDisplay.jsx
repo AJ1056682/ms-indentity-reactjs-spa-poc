@@ -6,14 +6,13 @@ function handleSumbit(event) {
 }
 
 export const AddGroupe = (props) => {
-    const groupes = props.roles;
+    const groupes = props.groupes;
     const selectedGroupe = props.selectedGroupe;
     const setSelectedGroupe = props.setSelectedGroupe;
     return (
         <>
-            {roles ? (
-                <Form onSubmit={handleSumbit}>
-                    <Form.Group controlId="roles">
+            {groupes ? (
+                    <Form.Group controlId="groupes">
                         <Form.Label>Groupe</Form.Label>
                         <Form.Control
                             as="select"
@@ -27,7 +26,6 @@ export const AddGroupe = (props) => {
                             ))}
                         </Form.Control>
                     </Form.Group>
-                </Form>
             ) : null}
         </>
     );

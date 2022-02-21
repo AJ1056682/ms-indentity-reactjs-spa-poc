@@ -1,10 +1,5 @@
 import "../styles/App.css";
-import { Tabs, Tab, Nav, Button, Form, FormControl, InputGroup } from "react-bootstrap";
-import { protectedResources } from "../authConfig";
-
-function handleSumbit(event) {
-    event.preventDefault();
-}
+import { Form, FormControl } from "react-bootstrap";
 
 export const EmailComponent = (props) => {
     return (
@@ -19,7 +14,6 @@ export const EmailComponent = (props) => {
             }}
         />
         </Form.Group>
-    {/* <pre>{JSON.stringify(roles, null, 2)}</pre> */}
     </>
     );
 }
