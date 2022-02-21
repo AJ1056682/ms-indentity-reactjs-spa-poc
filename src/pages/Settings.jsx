@@ -11,8 +11,9 @@ import { AddGroupe } from "../components/GroupeTabDisplay";
 
 function handleSumbit(event, selectedItem, email) {
   event.preventDefault();
-  console.log('it me!', selectedItem, email);
+  console.log(`Add Role : ${selectedItem} to User ${email}`);
 }
+
 const SettingsContent = () => {
   /**
    * useMsal is hook that returns the PublicClientApplication instance,
