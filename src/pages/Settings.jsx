@@ -1,9 +1,14 @@
 import { InteractionRequiredAuthError, InteractionType } from "@azure/msal-browser";
 import { MsalAuthenticationTemplate, useAccount, useMsal } from "@azure/msal-react";
 import { useEffect, useState } from "react";
-import { Button, Form, FormControl, InputGroup } from "react-bootstrap";
+import { Tabs, Tab, Nav, Button, Form, FormControl, InputGroup } from "react-bootstrap";
 import { loginRequest, protectedResources } from "../authConfig";
 import { callApiWithToken } from "../fetch";
+import { AddRole } from "../components/RoleTabDisplay";
+import { EmailComponent } from "../components/EmailComponent";
+import { ButtonAssignRoleComponent } from "../components/ButtonAssignRoleComponent";
+import { AddGroupe } from "../components/GroupeTabDisplay";
+
 
 const SettingsContent = () => {
   /**
@@ -16,89 +21,69 @@ const SettingsContent = () => {
   const account = useAccount(accounts[0] || {});
   const [graphData, setGraphData] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
+  const [selectedGroupe, setSelectedGroupe] = useState(null);
   const [email, setEmail] = useState(null);
   const roles = mapGraphDataToRoles(graphData);
+  const groupes = mapGraphDataToRoles(graphData);
 
   function mapGraphDataToRoles(_graphData) {
     return _graphData?.value.map((v) => v.value);
   }
 
-  function handleSumbit(event) {
-    event.preventDefault();
-    console.log({ email, selectedRole });
-  }
+  useEffect(async () => {
+    const scopes = protectedResources?.graphAppRoles.scopes;
+    const endpoint = protectedResources?.graphAppRoles.endpoint;
 
-  useEffect(() => {
-    if (account && inProgress === "none" && !graphData) {
-      instance
-        .acquireTokenSilent({
-          scopes: protectedResources.graphAppRoles.scopes,
-          account: account,
-        })
-        .then((response) => {
-          callApiWithToken(response.accessToken, protectedResources.graphAppRoles.endpoint).then((response) => {
-            setSelectedRole(mapGraphDataToRoles(response)[0]);
-            setGraphData(response);
-          });
-        })
-        .catch((error) => {
-          // in case if silent token acquisition fails, fallback to an interactive method
-          if (error instanceof InteractionRequiredAuthError) {
-            if (account && inProgress === "none") {
-              instance
-                .acquireTokenPopup({
-                  scopes: protectedResources.graphAppRoles.scopes,
-                })
-                .then((response) => {
-                  callApiWithToken(response.accessToken, protectedResources.graphAppRoles.endpoint).then((response) => {
-                    setSelectedRole(mapGraphDataToRoles(response)[0]);
-                    setGraphData(response);
-                  });
-                })
-                .catch((error) => console.log(error));
-            }
-          }
-        });
+    try {
+      if (account && inProgress === "none" && !graphData) {
+        const response = await instance.acquireTokenSilent({ scopes, account })
+        const data = await callApiWithToken(response.accessToken, endpoint, 'GET')
+        setSelectedRole(mapGraphDataToRoles(data)[0]);
+        setGraphData(data);
+      }
+    } catch (error) {
+      // in case if silent token acquisition fails, fallback to an interactive method
+      if (error instanceof InteractionRequiredAuthError) {
+        if (account && inProgress === "none") {
+          const response = await instance.acquireTokenPopup({ scopes })
+          const data = await callApiWithToken(response.accessToken, endpoint, 'GET')
+          setSelectedRole(mapGraphDataToRoles(data)[0]);
+          setGraphData(data);
+        }
+      }
     }
   }, [account, inProgress, instance]);
-  return (
-    <>
-      {roles ? (
-        <div className="container-md">
-          <Form onSubmit={handleSumbit}>
-            <Form.Group controlId="role">
-              <Form.Label>Role</Form.Label>
-              <Form.Control
-                as="select"
-                defaultValue={selectedRole}
-                onChange={(e) => {
-                  setSelectedRole(e.target.value);
-                }}
-              >
-                {roles.map((role, index) => (
-                  <option key={index}>{role}</option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-            <Form.Group controlId="email">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Assign Role
-            </Button>
-          </Form>
-        </div>
-      ) : null}
 
-      {/* <pre>{JSON.stringify(roles, null, 2)}</pre> */}
-    </>
+  return (
+    <Tabs
+      defaultActiveKey="groupe"
+      transition={false}
+      id="noanim-tab-example"
+      className="mb-2">
+      <Tab eventKey="groupe" title="Groupe">
+      {/* {roles ? (
+          <>
+            <div className="container-md">
+              <AddGroupe groupes={groupes} selectedGroupe={selectedGroupe} setSelectedGroupe={setSelectedGroupe} />
+              <EmailComponent setEmail={setEmail} />
+              <ButtonAssignRoleComponent selectedGroupe={selectedGroupe} email={email}/>
+            </div>
+          </>
+        ) : null} */}
+      </Tab>
+      <Tab eventKey="role" title="Role">
+        {roles ? (
+          <>
+            <div className="container-md">
+              <AddRole roles={roles} selectedRole={selectedRole} setSelectedRole={setSelectedRole} />
+              <EmailComponent setEmail={setEmail} />
+              <ButtonAssignRoleComponent selectedRole={selectedRole} email={email}/>
+            </div>
+          </>
+        ) : null}
+      </Tab>
+    </Tabs>
+
   );
 };
 

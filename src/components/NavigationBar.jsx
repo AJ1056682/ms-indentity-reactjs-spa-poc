@@ -31,7 +31,7 @@ export const NavigationBar = () => {
           <div style={{ display: "flex", justifyContent: "flex-end", flex: 1 }}>
             {!!role && (
               <div>
-                <Nav.Link as={Button} className="col" href="/admin-settings">
+                <Nav.Link as={Button} className="col" href="/admin-settings" onClick={event => handleSumbit(event)}>
                   Admin Settings
                 </Nav.Link>
               </div>

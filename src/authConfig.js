@@ -71,7 +71,7 @@ export const protectedResources = {
     scopes: ["api://e9f64af4-6e41-46a2-8cc8-414c715d37f0/access_as_user"], // e.g. api://xxxxxx/access_as_user
   },
   apiDossiers: {
-    endpoint: "http://localhost:5000/dossiers",
+    endpoint: "http://localhost:5000/country/FR/folders",
     scopes: ["api://e9f64af4-6e41-46a2-8cc8-414c715d37f0/access_as_super_user"], // e.g. api://xxxxxx/access_as_user
   },
   graphAppRoles: {

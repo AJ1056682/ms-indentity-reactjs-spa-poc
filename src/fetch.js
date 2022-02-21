@@ -3,14 +3,14 @@
  * Licensed under the MIT License.
  */
 
-export const callApiWithToken = async(accessToken, apiEndpoint) => {
+export const callApiWithToken = async(accessToken, apiEndpoint, httpMethod = 'GET') => {
     const headers = new Headers();
     const bearer = `Bearer ${accessToken}`;
 
     headers.append("Authorization", bearer);
 
     const options = {
-        method: "GET",
+        method: httpMethod,
         headers: headers
     };
 

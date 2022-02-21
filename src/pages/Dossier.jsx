@@ -44,7 +44,7 @@ const DossierContent = () => {
   
     return (
         <>
-            { dossierData ? <DossierData dossierData={dossierData} /> : null }
+            { dossierData ? <pre className="container-md"> {JSON.stringify(dossierData, null, 2)} </pre> : null }
         </>
     );
 };

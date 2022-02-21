@@ -37,7 +37,7 @@ export const HelloData = (props) => {
     const tableRows = Object.entries(props.helloData).map((entry, index) => {
         return (<tr key={index}>
             <td><b>{entry[0]}: </b></td>
-            <td>{entry[1]}</td>
+            <td>{entry[1]} </td>
         </tr>)
     });
 
