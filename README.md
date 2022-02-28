@@ -32,6 +32,11 @@ You 'll learn how to assign custom admin roles using the Microsoft Graph API in 
 In the following you will see how to enable a JavaScript SPA to query the Microsoft Graph API by acquiring security tokens from the the Microsoft identity platform. In this scenario, after a user signs in, an access token is requested and added to HTTP requests in the authorization header. Token acquisition and renewal are handled by the Microsoft Authentication Library for JavaScript (MSAL.js).
 
 1. Sign in users and call the Microsoft Graph API from a JavaScript single-page app (SPA) using auth code flow with PKCE.
+2. Initiate the Authorization Code with PKCE Flow by supplying the details of the Azure AD Registered Application (client_id, tenant_id, scopes, redirect_uri, PKCE code_challenge, PKCE algorithm). This part is also interactive whereby an interactive user AuthN/AuthZ flow is processed for the registered app. This is against the OAuth2.0 authorize endpoint.
+3. Receive an Authorization Code
+4. Request a token from the OAuth2.0 token endpoint by providing the authorization code received in step 1, client_id and client_secret of the registered Azure AD App and the code_verifier for the code_challenge sent in step 1. This is essentially the client credentials flow with the additional security of Proof Key for Code Exchange
+5. Receive an access_token
+6. Access permitted Microsoft Graph scopes
 
 ![Overview](./ReadmeFiles/spa-auth-code-flow-graph-api-aad.png)
 
