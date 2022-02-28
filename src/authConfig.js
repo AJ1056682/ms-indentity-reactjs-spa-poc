@@ -5,6 +5,10 @@
 
 import { LogLevel } from "@azure/msal-browser";
 
+const GRAPHE_BASE_URL = 'https://graph.microsoft.com/v1.0';
+export const BACKEND_API_SERVICE_PRINCIPAL_ID = 'ce7e8727-2dd4-40cd-b7dc-c004dd28e09e';
+
+
 /**
  * Configuration object to be passed to MSAL instance on creation.
  * For a full list of MSAL.js configuration parameters, visit:
@@ -63,7 +67,7 @@ export const loginRequest = {
  */
 export const protectedResources = {
     graphMe: {
-        endpoint: "https://graph.microsoft.com/v1.0/me",
+        endpoint: `${GRAPHE_BASE_URL}/me`,
         httpVerb: 'GET',
         scopes: ["User.Read"],
     },
@@ -78,24 +82,24 @@ export const protectedResources = {
         scopes: ["api://e9f64af4-6e41-46a2-8cc8-414c715d37f0/access_as_super_user"], // e.g. api://xxxxxx/access_as_user
     },
     graphAppRoles: {
-        endpoint: "https://graph.microsoft.com/v1.0/servicePrincipals/ce7e8727-2dd4-40cd-b7dc-c004dd28e09e/appRoles",
+        endpoint: `${GRAPHE_BASE_URL}/servicePrincipals/${BACKEND_API_SERVICE_PRINCIPAL_ID}/appRoles`,
         httpVerb: 'GET',
         scopes: ["AppRoleAssignment.ReadWrite.All"],
     },
     graphGetUserByEmail: {
-        endpoint: "https://graph.microsoft.com/v1.0/users?$filter=mail%20eq",
+        endpoint: `${GRAPHE_BASE_URL}/users?$filter=mail%20eq`,
         httpVerb: 'GET',
         scopes: ["User.Read.All"],
     },
     graphPostAppRoleAssignedTo: {
-        endpoint: "https://graph.microsoft.com/v1.0/servicePrincipals/ce7e8727-2dd4-40cd-b7dc-c004dd28e09e/appRoleAssignedTo",
+        endpoint: `${GRAPHE_BASE_URL}/servicePrincipals/${BACKEND_API_SERVICE_PRINCIPAL_ID}/appRoleAssignedTo`,
         httpVerb: 'POST',
-        scopes: ["AppRoleAssignment.ReadWrite.All"],
-        body: {
-            principalId: null,
-            resourceId: null,
-            appRoleId: null
-        }
+        scopes: ["AppRoleAssignment.ReadWrite.All"]
+    },
+    graphGetAppRoleAssignedTo: {
+        endpoint: `${GRAPHE_BASE_URL}/servicePrincipals/${BACKEND_API_SERVICE_PRINCIPAL_ID}/appRoleAssignedTo`,
+        httpVerb: 'GET',
+        scopes: ["Application.Read.All"]
     },
 
 };

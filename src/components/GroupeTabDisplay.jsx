@@ -6,23 +6,25 @@ function handleSumbit(event) {
 }
 
 export const AddGroupe = (props) => {
-    const groupes = props.groupes;
-    const selectedGroupe = props.selectedGroupe;
-    const setSelectedGroupe = props.setSelectedGroupe;
+    const groups = props.groups;
+    const selectedGroup = props.selectedGroup;
+    const setSelectedGroup = props.setSelectedGroup;
+    const setSelectedGroupId = props.setSelectedGroupId;
     return (
         <>
-            {groupes ? (
-                    <Form.Group controlId="groupes">
-                        <Form.Label>Groupe</Form.Label>
+            {groups ? (
+                    <Form.Group controlId="groups">
+                        <Form.Label>Group</Form.Label>
                         <Form.Control
                             as="select"
-                            defaultValue={selectedGroupe}
+                            defaultValue={selectedGroup}
                             onChange={(e) => {
-                                setSelectedGroupe(e.target.value);
+                                setSelectedGroup(e.target.value);
+                                setSelectedGroupId((groups.filter(group => group.value === e.target.value))[0].appGroupId);
                             }}
                         >
-                            {groupes.map((groupe, index) => (
-                                <option key={index}>{groupe}</option>
+                            {groups.map((group, index) => (
+                                <option key={index}>{group.value}</option>
                             ))}
                         </Form.Control>
                     </Form.Group>
