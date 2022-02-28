@@ -27,7 +27,7 @@ const SettingsContent = () => {
   const roles = mapGraphDataToRoles(graphDataRoles);
   const groups = mapGraphDataToGroups(graphDataGroups);
 
-  async function handleSumbitAssignedUserTo(event, selectedItem, selectedEmail, selectedItemId) {
+  async function handleSumbitAssignedUserToRole(event, selectedItem, selectedEmail, selectedItemId) {
     event.preventDefault();
     const response = await instance.acquireTokenSilent({ scopes: protectedResources?.graphGetUserByEmail.scopes, account });
     const graphGetUserByEmailResponse = await callApiWithToken(response.accessToken, `${protectedResources?.graphGetUserByEmail.endpoint}%20'${selectedEmail}'`, protectedResources?.graphGetUserByEmail.httpVerb);
@@ -38,6 +38,18 @@ const SettingsContent = () => {
     }
     const graphPostAppRoleAssignedToResponse = await callApiWithToken(response.accessToken, protectedResources?.graphPostAppRoleAssignedTo.endpoint, protectedResources?.graphPostAppRoleAssignedTo.httpVerb, body);
     console.log(`Add Role : ${selectedItem} to User ${selectedEmail}`, body, graphPostAppRoleAssignedToResponse);
+  }
+
+  async function handleSumbitAssignedUserToGroup(event, selectedItem, selectedEmail, selectedItemId) {
+    event.preventDefault();
+    const response = await instance.acquireTokenSilent({ scopes: protectedResources?.graphGetUserByEmail.scopes, account });
+    const graphGetUserByEmailResponse = await callApiWithToken(response.accessToken, `${protectedResources?.graphGetUserByEmail.endpoint}%20'${selectedEmail}'`, protectedResources?.graphGetUserByEmail.httpVerb);
+    const UserPrincipalId = graphGetUserByEmailResponse?.value?.[0].id;
+    const groupAddMemeberEndpoint = protectedResources?.graphGroupPostAddMembers.endpoint.replace(protectedResources?.graphGroupPostAddMembers.regex, selectedItemId);
+    console.log('this is my test : ', groupAddMemeberEndpoint);
+    const body = { '@odata.id': `https://graph.microsoft.com/v1.0/directoryObjects/${UserPrincipalId}` }
+    const graphPostAppRoleAssignedToResponse = await callApiWithToken(response.accessToken, groupAddMemeberEndpoint, protectedResources?.graphGroupPostAddMembers.httpVerb, body);
+    console.log(`Add User : ${selectedEmail} to Group ${selectedItem}`, body, graphPostAppRoleAssignedToResponse);
   }
 
   function mapGraphDataToRoles(_graphDataRoles) {
@@ -92,7 +104,7 @@ const SettingsContent = () => {
         {groups ? (
           <>
             <div className="container-md">
-              <Form onSubmit={(event) => handleSumbitAssignedUserTo(event, selectedGroup, selectedEmail, selectedGroupId)}>
+              <Form onSubmit={(event) => handleSumbitAssignedUserToGroup(event, selectedGroup, selectedEmail, selectedGroupId)}>
                 <AddGroupe groups={groups} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} setSelectedGroupId={setSelectedGroupId} />
                 <EmailComponent setEmail={setEmail} />
                 <Button variant="primary" type="submit" >
@@ -108,7 +120,7 @@ const SettingsContent = () => {
         {roles ? (
           <>
             <div className="container-md">
-              <Form onSubmit={(event) => handleSumbitAssignedUserTo(event, selectedRole, selectedEmail, selectedRoleId)}>
+              <Form onSubmit={(event) => handleSumbitAssignedUserToRole(event, selectedRole, selectedEmail, selectedRoleId)}>
                 <Form.Group controlId="role">
                   <AddRole roles={roles} selectedRole={selectedRole} setSelectedRole={setSelectedRole} setSelectedRoleId={setSelectedRoleId} />
                   <EmailComponent setEmail={setEmail} />

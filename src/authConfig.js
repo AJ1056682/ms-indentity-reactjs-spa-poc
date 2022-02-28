@@ -8,7 +8,6 @@ import { LogLevel } from "@azure/msal-browser";
 const GRAPHE_BASE_URL = 'https://graph.microsoft.com/v1.0';
 export const BACKEND_API_SERVICE_PRINCIPAL_ID = 'ce7e8727-2dd4-40cd-b7dc-c004dd28e09e';
 
-
 /**
  * Configuration object to be passed to MSAL instance on creation.
  * For a full list of MSAL.js configuration parameters, visit:
@@ -100,6 +99,12 @@ export const protectedResources = {
         endpoint: `${GRAPHE_BASE_URL}/servicePrincipals/${BACKEND_API_SERVICE_PRINCIPAL_ID}/appRoleAssignedTo`,
         httpVerb: 'GET',
         scopes: ["Application.Read.All"]
+    },
+    graphGroupPostAddMembers: {
+        endpoint: `${GRAPHE_BASE_URL}/groups/{group-id}/members/$ref`,
+        httpVerb: 'POST',
+        scopes: ["Application.Read.All"],
+        regex: /{group-id}/i,
     },
 
 };
