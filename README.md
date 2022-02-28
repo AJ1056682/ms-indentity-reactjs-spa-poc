@@ -16,13 +16,30 @@ This sample demonstrates a React single-page application (SPA) calling a protect
 
 Here you'll learn how to [register a protected web API](https://docs.microsoft.com/azure/active-directory/develop/scenario-protected-web-api-app-registration), [accept authorized calls](https://docs.microsoft.com/azure/active-directory/develop/scenario-protected-web-api-verification-scope-app-roles) and [validate access tokens](https://docs.microsoft.com/azure/active-directory/develop/access-tokens#validating-tokens).
 
+You 'll learn how to assign custom admin roles using the Microsoft Graph API in Azure Active Directory from your applciation.
+
 ## Scenario
 
+### Call your secure Web API
 1. The client React SPA uses **MSAL React** to sign-in and obtain a JWT access token from **Azure AD**.
 1. The access token is used as a bearer token to authorize the user to call the Node.js web API protected by **Azure AD**.
 1. The protected web API responds with the claims in the **Access Token**.
 
 ![Overview](./ReadmeFiles/topology.png)
+
+### Call AAD Graphe API
+
+In the following you will see how to enable a JavaScript SPA to query the Microsoft Graph API by acquiring security tokens from the the Microsoft identity platform. In this scenario, after a user signs in, an access token is requested and added to HTTP requests in the authorization header. Token acquisition and renewal are handled by the Microsoft Authentication Library for JavaScript (MSAL.js).
+
+1. Sign in users and call the Microsoft Graph API from a JavaScript single-page app (SPA) using auth code flow with PKCE.
+
+![Overview](./ReadmeFiles/spa-auth-code-flow-graph-api-aad.png)
+
+
+### Use AAD Graphe API to assign user to groups and roles
+
+![Overview](./ReadmeFiles/AAD-API-GRAPH-WORFLOW.png)
+
 
 ## Contents
 
